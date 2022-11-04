@@ -9,7 +9,7 @@ const cookieParser = require("cookie-parser");
 
 //Routes
 const authRoutes = require("./routes/auth");
-
+const profileRoutes = require("./routes/profile");
 //Connection
 mongoose.connect(process.env.DATABASE,{
     useNewUrlParser : true,
@@ -30,7 +30,7 @@ app.use(cors());
 
 //My Routes
 app.use('/api',authRoutes);
-
+app.use('/api',profileRoutes);
 app.listen(port,()=>{
     console.log(`Server is running at port ${port}`)
 });

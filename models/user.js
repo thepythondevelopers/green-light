@@ -145,6 +145,9 @@ const userSchema = new Schema({
         required : true,
         trim : true
     },    
+    images:{
+        type :Array
+    },
     role:{
         type:String,
         required : true,

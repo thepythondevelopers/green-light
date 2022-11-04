@@ -1,11 +1,10 @@
 const User = require("../models/user");
-const UserToken = require("../models/userToken");
 const {validationResult} = require("express-validator");
-const bcrypt = require("bcrypt");
-const { v4: uuidv4 } = require('uuid');
-var jwt = require('jsonwebtoken');
+const AWS = require('aws-sdk');
 
-const moment= require('moment') 
+
+
+ 
 
 
 exports.personalInformation =  (req,res)=>{
@@ -183,3 +182,90 @@ exports.locationInformation =  (req,res)=>{
                 
     })
 } 
+
+function random_code(length) {
+    var result           = '';
+    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < length; i++ ) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+}
+
+exports.profileImage = async (req,res)=>{
+    random = await random_code(8);
+    const s3 = new AWS.S3({
+        accessKeyId: process.env.AWS_ID,
+        secretAccessKey: process.env.AWS_SECRET
+    });
+    
+    const params = {
+        Bucket: process.env.AWS_BUCKET_NAME,
+        Key: random + req.files.image[0].originalname, // File name you want to save as in S3
+        Body: req.files.image[0].buffer,
+        ContentType: req.files.image[0].mimetype
+    }
+
+    //Uploading files to the bucket
+    try {
+        const stored = await s3.upload(params).promise()
+        await User.updateOne(
+            { _id: req.user._id },
+            { $push: { images: stored.key } }
+         )
+       return res.json({message: 'File uploaded successfully.' });
+      } catch (err) {
+        return res.status(400).json({message: 'Error Occur While uploading.',error:err });
+      }
+    
+
+}
+
+exports.profileImageDelete = async (req,res)=>{
+    key = req.params.key;
+    const s3 = new AWS.S3({
+        accessKeyId: process.env.AWS_ID,
+        secretAccessKey: process.env.AWS_SECRET
+    });
+    
+    
+    var params = {  Bucket: process.env.AWS_BUCKET_NAME, Key: key };
+
+
+try {
+    const stored = await s3.deleteObject(params).promise()
+    user = await User.findOne({ _id: req.user._id });
+    image = user.images;
+    image = image.filter(item => item !== key);
+    data = {
+        images : image
+    }
+    await User.findOneAndUpdate(
+        {_id : req.user._id},
+        {$set : data},
+        {new: true},
+        (err,location) => {
+            if(err){
+                return res.status(404).json({
+                    error : err
+                })
+            
+            }
+    
+            if(location===null){
+                return res.status(404).json({
+                    message : "No Data Found"
+                })
+            }
+    
+            return res.json({message: 'File deleted successfully.' });
+        }
+        )
+   
+  } catch (err) {
+    return res.status(400).json({message: 'Error Occur While uploading.',error:err });
+  }
+
+}
+
