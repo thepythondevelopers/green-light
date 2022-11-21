@@ -2,11 +2,13 @@ var express = require('express')
 var router = express.Router()
 const { check} = require("express-validator");
 const User = require("../models/user");
-const {personalInformation,personalPreferences,professionalInformation,locationInformation,profileImage,profileImageDelete} = require("../controllers/profile");
+const {personalInformation,personalPreferences,professionalInformation,locationInformation,profileImage,profileImageDelete,getProfile} = require("../controllers/profile");
 const {verifyToken} = require("../middleware/auth");
 var multer = require('multer');
 const storage = multer.memoryStorage()
 const upload = multer({ storage: storage })
+
+router.get("/get-profile",verifyToken,getProfile);
 
 router.post("/personal-information",verifyToken,personalInformation);
 router.post("/personal-preferences",verifyToken,personalPreferences);
