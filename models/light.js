@@ -15,6 +15,7 @@ const lightSchema = new Schema({
       },  
     light:{
         type:String,
+        enum : ['Green','Yellow','Red'],
         required : true,
       },
     
