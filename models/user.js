@@ -89,10 +89,18 @@ const userSchema = new Schema({
         trim : true
     },
     interested_in:{
-        type:String,
+        type:Array,
         required : true,
         trim : true
     },
+    religion:{
+        type:String,
+        trim : true
+    },
+    politics:{
+        type:String,
+        trim : true
+    },  
     have_car:{
         type:String,
         trim : true

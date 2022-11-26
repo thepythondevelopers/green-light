@@ -71,7 +71,9 @@ exports.personalPreferences = (req,res) =>{
     want_kids : req.body.want_kids,
     astrology_sign : req.body.astrology_sign,
     ethinicity : req.body.ethinicity,
-    looking_for : req.body.looking_for
+    looking_for : req.body.looking_for,
+    religion : req.body.religion,
+    politics : req.body.politics
   }
 
   User.findOneAndUpdate(
