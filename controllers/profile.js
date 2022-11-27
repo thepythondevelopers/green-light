@@ -271,6 +271,32 @@ try {
 
 }
 
+exports.imagePosition = async (req,res)=>{   
+    data = {
+        images : req.body.images
+    }
+    await User.findOneAndUpdate(
+        {_id : req.user._id},
+        {$set : data},
+        {new: true},
+        (err,u) => {
+            if(err){
+                return res.status(404).json({
+                    error : err
+                })
+            
+            }
+    
+            if(u===null){
+                return res.status(404).json({
+                    message : "No Data Found"
+                })
+            }
+    
+            return res.json({message: 'Image Position Change Successfully.' });
+        }
+        )
+}
 
 exports.getProfile = async (req,res)=>{   
     user = await User.findOne({_id:req.user._id});
