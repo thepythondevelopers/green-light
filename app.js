@@ -17,7 +17,8 @@ const chatRoutes = require("./routes/chat");
 mongoose.connect(process.env.DATABASE,{
     useNewUrlParser : true,
     useUnifiedTopology : true,
-    useCreateIndex : true
+    useCreateIndex : true,
+    useFindAndModify : false
 }).then(()=>{
     console.log('DATA CONNECTED');
 }).catch((err)=>{

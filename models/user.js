@@ -173,6 +173,10 @@ const userSchema = new Schema({
         type:Boolean,
         default:1 //0=>False 1=>True/Active
     },
+    plan:{
+        type:String,
+        default:'Basic'
+    },
 },{timestamps: true});
 
 module.exports = mongoose.model("User",userSchema);

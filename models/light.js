@@ -3,17 +3,22 @@ const Schema = mongoose.Schema;
 const {ObjectId} = mongoose.Schema;
 
 const lightSchema = new Schema({
-    to:{
+    initiated_id:{
         type : ObjectId,
         ref: "User",
         required : true,
       },
-    by:{
+      sent_to:{
         type : ObjectId,
         ref: "User",
         required : true,
       },  
-    light:{
+      sent_light:{
+        type:String,
+        enum : ['Green','Yellow','Red'],
+        required : true,
+      },
+      response_light:{
         type:String,
         enum : ['Green','Yellow','Red'],
         required : true,
