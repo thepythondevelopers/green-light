@@ -137,7 +137,7 @@ exports.signin = (req,res) =>{
                 })
             }
           //url = process.env.BASE_URL+'api/confirm-password/'
-      url = 'http://localhost:8000/'+token
+      url = 'http://54.158.4.117/create-password/'+token
       try {
         await sendGridMail.send(forgetpassword_email(req.body.email,url));
        
