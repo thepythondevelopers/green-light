@@ -20,8 +20,7 @@ const lightSchema = new Schema({
       },
       response_light:{
         type:String,
-        enum : ['Green','Yellow','Red'],
-        required : true,
+        enum : ['Green','Yellow','Red']
       },
     
 },{timestamps: true});
