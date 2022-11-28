@@ -5,7 +5,33 @@ const app = express();
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
+/*const server = require('http').createServer();
+const io = require('socket.io')(server);*/
 
+const socket = require("socket.io");
+
+/*server.listen(3000, () => {
+  console.log('listening on *:3000');
+});*/
+/*io.on('connection', client => {
+   
+  client.on('event', data => {  });
+  client.on('disconnect', () => {  });
+});*/
+
+/*io.on('connection', (socket) => {
+   console.log("Hello");
+  socket.on('chat message', (msg) => {
+    io.emit('chat message', msg);
+  });
+  socket.on('notification', (msg) => {
+    io.emit('notification', msg);
+  });
+  socket.on('job', (msg) => {
+    io.emit('job', msg);
+  });
+  
+});*/
 
 //Routes
 const authRoutes = require("./routes/auth");
@@ -38,7 +64,37 @@ app.use('/api',profileRoutes);
 app.use('/api',matchingAlgoRoutes);
 app.use('/api',lightRoutes);
 app.use('/api',chatRoutes);
-app.listen(port,()=>{
+server = app.listen(port,()=>{
     console.log(`Server is running at port ${port}`)
 });
 
+
+/*server.listen(3000, () => {
+  console.log('listening on *:3000');
+});*/
+
+const io = require('socket.io')(server, {
+  cors: {
+    origin: '*',
+  }
+});
+/*io.on("connection", function (socket) {
+  console.log("Made socket connection");
+});*/
+
+
+io.on("connection", function (socket) {
+  console.log("Made socket connection");
+
+  socket.on("new user", function (data) {
+    //socket.userId = data;
+    //activeUsers.add(data);
+    //io.emit("new user", [...activeUsers]);
+    io.emit("new user", 'fdf');
+  });
+
+  socket.on("disconnect", () => {
+  //  activeUsers.delete(socket.userId);
+    io.emit("user disconnected", 'Delected');
+  });
+});
