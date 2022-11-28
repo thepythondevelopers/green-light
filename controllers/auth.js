@@ -474,6 +474,53 @@ exports.signin = (req,res) =>{
   }
   
 
+exports.socialLogin = async (req,res) =>{
+  user = User.findOne({email:req.body.email,singup_type :{ $ne: 'web' }});
+
+  
+  if(user!=null){
+    var token = jwt.sign({ _id: user._id,email:user.email,role:user.role }, process.env.SECRET,{ expiresIn: '1d'  });
+    user_email = user.email;
+    await UserToken.create({token:token}).then( usertoken => {
+    }).catch(err => {
+      res.status(500).send({
+        message:
+          err.message || "Some error occurred."
+      });
+    });
+    await UserToken.deleteOne({ created_at:{$lte:moment().subtract(2, 'days').toDate()} });
+    
+    return  res.json({token,user:{user_email}});
+  }else{
+    pass = uuidv4();
+    pass = pass.replace(/-/g,"");  
+  const hash = bcrypt.hashSync(pass, 10);
+  user_data = {
+    password : pass,
+    dob : req.body.dob,
+    display_name : req.body.display_name,
+    email : req.body.email,
+    singup_type : req.body.singup_type
+  }
+
+  u =new User(data);
+  u.save((err,us)=>{
+        if(err){
+            return res.status(400).json({
+                message : err
+            })
+        }
+        var token = jwt.sign({ _id: us._id,email:us.email,role:us.role }, process.env.SECRET,{ expiresIn: '1d'  });
+        user_email = us.email;
+        
+        return  res.json({token,user:{user_email}});
+  })  
+
+  
+  }
+}    
+
+
 exports.logout = (req,res) =>{
   const token = req.headers["x-access-token"];
   UserToken.deleteOne({token: token}).then(function(rowDeleted){

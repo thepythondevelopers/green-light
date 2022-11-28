@@ -177,6 +177,10 @@ const userSchema = new Schema({
         type:String,
         default:'Basic'
     },
+    singup_type:{
+        type:String,
+        default:'web'
+    }
 },{timestamps: true});
 
 module.exports = mongoose.model("User",userSchema);

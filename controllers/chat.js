@@ -3,6 +3,8 @@ const Light = require("../models/light");
 const Chat = require("../models/chat");
 const mongoose = require("mongoose");
 const ObjectId = mongoose.Types.ObjectId;
+const server = require('http').createServer();
+const io = require('socket.io')(server);
 const {validationResult} = require("express-validator");
 
 exports.saveChat = async (req,res)=>{
@@ -44,3 +46,13 @@ exports.getChat = async (req,res) =>{
  return res.json(result);    
     
 }
+
+exports.test = async (req,res)=>{
+  io.on('connection', client => {
+    console.log('f');
+    client.on('event', data => { /* … */ });
+    client.on('disconnect', () => { /* … */ });
+  });
+  console.log('ff');
+  server.listen(3000);
+}  
