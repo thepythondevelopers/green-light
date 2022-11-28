@@ -5,10 +5,16 @@ const app = express();
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
+const socketIO = require('socket.io');
+const http = require('http');
+let server = http.createServer(app)
+let io = socketIO(server)
+ 
+
 /*const server = require('http').createServer();
 const io = require('socket.io')(server);*/
 
-const socket = require("socket.io");
+//const socket = require("socket.io");
 
 /*server.listen(3000, () => {
   console.log('listening on *:3000');
@@ -64,26 +70,28 @@ app.use('/api',profileRoutes);
 app.use('/api',matchingAlgoRoutes);
 app.use('/api',lightRoutes);
 app.use('/api',chatRoutes);
-server = app.listen(port,()=>{
+/*server = app.listen(port,()=>{
     console.log(`Server is running at port ${port}`)
+});*/
+server.listen(port);
+io.on('connection', (socket)=>{
+  console.log('New user connected');
 });
-
-
 /*server.listen(3000, () => {
   console.log('listening on *:3000');
 });*/
 
-const io = require('socket.io')(server, {
+/*const io = require('socket.io')(server, {
   cors: {
     origin: '*',
   }
-});
+});*/
 /*io.on("connection", function (socket) {
   console.log("Made socket connection");
 });*/
 
 
-io.on("connection", function (socket) {
+/*io.on("connection", function (socket) {
   console.log("Made socket connection");
 
   socket.on("new user", function (data) {
@@ -97,4 +105,4 @@ io.on("connection", function (socket) {
   //  activeUsers.delete(socket.userId);
     io.emit("user disconnected", 'Delected');
   });
-});
+});*/
