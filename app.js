@@ -8,8 +8,8 @@ const cookieParser = require("cookie-parser");
 const socketIO = require('socket.io');
 const http = require('http');
 let server = http.createServer(app)
-let io = socketIO(server)
- 
+//let io = socketIO(server)
+app.set('view engine', 'ejs');
 
 /*const server = require('http').createServer();
 const io = require('socket.io')(server);*/
@@ -73,22 +73,33 @@ app.use('/api',chatRoutes);
 /*server = app.listen(port,()=>{
     console.log(`Server is running at port ${port}`)
 });*/
+
+app.get('/', (req, res)=>{
+ 
+  // The render method takes the name of the HTML
+  // page to be rendered as input
+  // This page should be in the views folder
+  // in the root directory.
+  res.render('home');
+   
+  });
+
 server.listen(port);
-io.on('connection', (socket)=>{
-  console.log('New user connected');
-});
+// io.on('connection', (socket)=>{
+//   console.log('New user connected');
+// });
 /*server.listen(3000, () => {
   console.log('listening on *:3000');
 });*/
 
-/*const io = require('socket.io')(server, {
+const io = require('socket.io')(server, {
   cors: {
     origin: '*',
   }
-});*/
-/*io.on("connection", function (socket) {
+});
+io.on("connection", function (socket) {
   console.log("Made socket connection");
-});*/
+});
 
 
 /*io.on("connection", function (socket) {
