@@ -101,3 +101,7 @@ exports.responseLight = async (req,res)=>{
   return res.json(light);
 })
 }  
+
+exports.test = async (req,res)=>{
+  return res.json('Hello');
+}  
