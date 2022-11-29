@@ -21,7 +21,7 @@ exports.verifyToken = async (req, res, next) => {
   
   req.user = decoded;
   
-  user = await User.findOne({_id: req.user._id,status:1});
+  user = await User.findOne({_id: req.user._id,status: { $ne: 0 }});
   
   if (user === null) {
     return res.status(401).send({

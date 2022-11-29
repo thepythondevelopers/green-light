@@ -547,3 +547,81 @@ exports.logout = (req,res) =>{
   }); 
  });
 }
+
+exports.accountActivate = (req,res) =>{
+  data = {
+    status : 1
+  }
+  User.findOneAndUpdate(
+    {_id: req.user._id},
+    {$set : data},
+    {new: true},
+    async (err,user) =>  {
+        if(err){
+            return res.status(404).json({
+                error : err
+            })
+        
+        }
+        if(user===null){
+            return res.status(404).json({
+                message : "No Data Found"
+            })
+        }
+          
+        return res.json({message:"Account Active Successfully."})
+      })    
+}
+
+exports.accountDeactivate = (req,res) =>{
+  data = {
+    status : 2
+  }
+  User.findOneAndUpdate(
+    {_id: req.user._id},
+    {$set : data},
+    {new: true},
+    async (err,user) =>  {
+        if(err){
+            return res.status(404).json({
+                error : err
+            })
+        
+        }
+        if(user===null){
+            return res.status(404).json({
+                message : "No Data Found"
+            })
+        }
+          
+        return res.json({message:"Account De-Active Successfully."})
+      })    
+}
+
+
+exports.accountDelete = (req,res) =>{
+  const token = req.headers["x-access-token"];
+  data = {
+    status : 0
+  }
+  User.findOneAndUpdate(
+    {_id: req.user._id},
+    {$set : data},
+    {new: true},
+    async (err,user) =>  {
+        if(err){
+            return res.status(404).json({
+                error : err
+            })
+        
+        }
+        if(user===null){
+            return res.status(404).json({
+                message : "No Data Found"
+            })
+        }
+        await UserToken.deleteOne({token: token});  
+        return res.json({message:"Account Deleted Successfully."})
+      })    
+  
+}

@@ -170,8 +170,9 @@ const userSchema = new Schema({
         trim : true
     },
     status:{
-        type:Boolean,
-        default:1 //0=>False 1=>True/Active
+        type:Number,
+        enum : [0,1,2],
+        default:1 //0=>False/Delete 1=>True/Active 2=>Deactive
     },
     plan:{
         type:String,
