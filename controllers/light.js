@@ -6,11 +6,11 @@ const {validationResult} = require("express-validator");
 
 exports.saveLight = async (req,res)=>{
   
-  data = {
-    sent_to : req.body.sent_to,
-    initiated_id : req.user._id,
-    sent_light : req.body.sent_light
-  }
+  // data = {
+  //   sent_to : req.body.sent_to,
+  //   initiated_id : req.user._id,
+  //   sent_light : req.body.sent_light
+  // }
   light = await Light.findOne({sent_to1 : req.user._id,user1: ObjectId(req.body.sent_to)});
   
   if(light!=null){
@@ -64,12 +64,12 @@ exports.saveLight = async (req,res)=>{
 }
 
 exports.sentGreenLight = async (req,res)=>{
-  user = await Light.find({user1: req.user._id,sent_light1 : 'Green'}).populate('user1','-password').populate('sent_to1','-password');
+  user = await Light.find({$or: [ { user1:  ObjectId(req.user._id)  }, { user2: ObjectId(req.user._id) } ],user1: req.user._id,sent_light1 : 'Green'}).populate('user1','-password').populate('sent_to1','-password');
   return res.send(user);
 }
 
 exports.yellowLight = async (req,res)=>{
-  user = await Light.find({user1: req.user._id,sent_light1 : 'Yellow'}).populate('user1','-password').populate('sent_to1','-password');
+  user = await Light.find({$or: [ { user1:  ObjectId(req.user._id)  }, { user2: ObjectId(req.user._id) } ],sent_light1 : 'Yellow'}).populate('user1','-password').populate('sent_to1','-password');
   return res.send(user);
 }
 
