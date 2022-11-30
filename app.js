@@ -56,7 +56,7 @@ mongoose.connect(process.env.DATABASE,{
 }).catch((err)=>{
     console.log(err);
 })
-
+//mongoose.set('debug', true);
 
 const port = process.env.PORT || 8000;
 
