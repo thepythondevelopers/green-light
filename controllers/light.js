@@ -64,17 +64,17 @@ exports.saveLight = async (req,res)=>{
 }
 
 exports.sentGreenLight = async (req,res)=>{
-  user = await Light.find({$or: [ { user1:  ObjectId(req.user._id)  }, { user2: ObjectId(req.user._id) } ],user1: req.user._id,sent_light1 : 'Green'}).populate('user1','-password').populate('sent_to1','-password');
+  user = await Light.find({$or: [ { user1:  ObjectId(req.user._id) ,sent_light1 : 'Green',sent_light2 : { $ne: 'Green' } }, { user2: ObjectId(req.user._id),sent_light2 : 'Green',sent_light1 : { $ne: 'Green' }  } ]}).populate('user1','-password').populate('sent_to1','-password');
   return res.send(user);
 }
 
 exports.yellowLight = async (req,res)=>{
-  user = await Light.find({$or: [ { user1:  ObjectId(req.user._id)  }, { user2: ObjectId(req.user._id) } ],sent_light1 : 'Yellow'}).populate('user1','-password').populate('sent_to1','-password');
+  user = await Light.find({$or: [ { user1:  ObjectId(req.user._id) ,sent_light1 : 'Yellow' }, { user2: ObjectId(req.user._id) ,sent_light2 : 'Yellow'} ]}).populate('user1','-password').populate('sent_to1','-password');
   return res.send(user);
 }
 
 exports.mutualGreenLight = async (req,res)=>{
-  user = await Light.find({$or: [ { user1:  ObjectId(req.user._id)  }, { sent_to1: ObjectId(req.user._id) } ],sent_light1:"Green",sent_light2: "Green"}).populate('user1','-password').populate('sent_to1','-password');
+  user = await Light.find({$or: [ { user1:  ObjectId(req.user._id)  }, { user2: ObjectId(req.user._id) } ],sent_light1:"Green",sent_light2: "Green"}).populate('user1','-password').populate('sent_to1','-password');
   return res.send(user);
 }
 
