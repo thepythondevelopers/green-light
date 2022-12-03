@@ -7,8 +7,8 @@ const {verifyToken} = require("../middleware/auth");
 
 
 
-router.get("/matching-algo",verifyToken,matchingAlgo);
-router.get("/matching-algo-display-name",verifyToken,matchingAlgoDisplayName);
+router.post("/matching-algo",verifyToken,matchingAlgo);
+router.post("/matching-algo-display-name",verifyToken,matchingAlgoDisplayName);
 
 module.exports = router;
 
