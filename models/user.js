@@ -105,18 +105,12 @@ const userSchema = new Schema({
         type:String,
         trim : true
     },
-    work_position:{
-            type:String,
-            trim : true
-    },
-    work_employer:{
-            type:String,
-            trim : true
-    },
-    education_degree:{
-            type:String,
-            trim : true
-    },
+    work:[
+            {
+                position:String,
+                employer:String
+            }
+    ],
     education_school:{
             type:String,
             trim : true

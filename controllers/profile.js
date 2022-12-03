@@ -115,8 +115,7 @@ exports.professionalInformation =  (req,res)=>{
   
   user_data = {
     have_car : req.body.have_car,
-    work_position : req.body.work_position,
-    work_employer : req.body.work_employer,
+    work : req.body.work,
     education_degree : req.body.education_degree,
     education_school : req.body.education_school,
     about_me : req.body.aout_me
