@@ -37,3 +37,11 @@ exports.verifyToken = async (req, res, next) => {
   return next();
 };
 
+exports.adminroleCheck = (req,res,next) =>{
+  if(req.user.role!='Admin'){
+      return res.status(404).json({
+          err  : "Does't Not have permission."
+      })
+  }  
+  next();
+}

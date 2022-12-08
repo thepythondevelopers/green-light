@@ -58,7 +58,7 @@ exports.signin = (req,res) =>{
     const {email} = req.body;
     const status =1;
     const role = 'User';
-    User.findOne({email,status}, function(err, user) {
+    User.findOne({email,status,role}, function(err, user) {
       
      if (!user) {
         res.json({error:'User Not Found'});
@@ -516,7 +516,7 @@ exports.socialSignup = async (req,res) =>{
 }    
 
 exports.socialLogin = async (req,res) =>{
-  user = User.findOne({email:req.body.email,singup_type :{ $ne: 'web' }});
+  user = User.findOne({email:req.body.email,role:'User',singup_type :{ $ne: 'web' }});
 
   
   if(user!=null){
@@ -642,3 +642,51 @@ exports.accountDelete = (req,res) =>{
       })    
   
 }
+
+exports.adminSignin = (req,res) =>{
+  const errors = validationResult(req);
+  if(!errors.isEmpty()){
+      return res.status(400).json({
+          error : errors.array()
+      })
+  }
+  
+    const {email} = req.body;
+    const status =1;
+    const role = 'Admin';
+    User.findOne({email,status,role}, function(err, user) {
+      
+     if (!user) {
+        res.json({error:'User Not Found'});
+     } else {
+      bcrypt.compare(req.body.password, user.password, async function (err, result) {
+        if (result == true) {
+            //create token          
+          var token = jwt.sign({ _id: user._id,email:user.email,role:user.role }, process.env.SECRET,{ expiresIn: '1d'  });
+          user_email = user.email;
+  
+          
+  
+        await UserToken.create({token:token}).then( usertoken => {
+        }).catch(err => {
+          res.status(500).send({
+            message:
+              err.message || "Some error occurred."
+          });
+        });
+        await UserToken.deleteOne({ created_at:{$lte:moment().subtract(2, 'days').toDate()} });
+  
+          res.json({token,user:{user_email}});
+        } else {
+          res.json({error:"Incorrect Password"});
+        }
+      });
+    }
+  }).catch(err => {
+    res.status(500).send({
+      message:
+        err.message || "Some error occurred."
+    });
+  }); 
+  }
+  

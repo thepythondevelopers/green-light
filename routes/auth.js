@@ -2,7 +2,7 @@ var express = require('express')
 var router = express.Router()
 const { check} = require("express-validator");
 const User = require("../models/user");
-const {signup,socialSignup,socialLogin,signin,forget_password,change_password,accountDelete,accountDeactivate,accountActivate,logout} = require("../controllers/auth");
+const {signup,socialSignup,socialLogin,signin,forget_password,change_password,accountDelete,accountDeactivate,accountActivate,adminSignin,logout} = require("../controllers/auth");
 const {verifyToken} = require("../middleware/auth");
 
 router.post("/sign-up",[
@@ -59,6 +59,7 @@ router.post("/sign-in",[
 router.post("/account-delete",verifyToken,accountDelete);  
 router.post("/account-deactivate",verifyToken,accountDeactivate);  
 router.post("/account-activate",verifyToken,accountActivate);
+router.post("/admin-signin",adminSignin);
 router.post("/logout",verifyToken,logout);
 
 

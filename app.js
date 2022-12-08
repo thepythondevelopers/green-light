@@ -46,6 +46,7 @@ const matchingAlgoRoutes = require("./routes/matchingAlgo");
 const lightRoutes = require("./routes/light");
 const chatRoutes = require("./routes/chat");
 const reportRoutes = require("./routes/report");
+const adminCustomerRoutes = require("./routes/adminCustomer");
 //Connection
 mongoose.connect(process.env.DATABASE,{
     useNewUrlParser : true,
@@ -72,6 +73,8 @@ app.use('/api',matchingAlgoRoutes);
 app.use('/api',lightRoutes);
 app.use('/api',chatRoutes);
 app.use('/api',reportRoutes);
+app.use('/api',adminCustomerRoutes);
+
 /*server = app.listen(port,()=>{
     console.log(`Server is running at port ${port}`)
 });*/
