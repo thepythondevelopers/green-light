@@ -123,6 +123,10 @@ const userSchema = new Schema({
         type:String,
         trim : true
     },
+    latLng:{
+        type:String,
+        trim : true
+    },
     mobile:{
         type:Number,
         trim : true
