@@ -123,10 +123,18 @@ const userSchema = new Schema({
         type:String,
         trim : true
     },
-    latLng:{
-        type:String,
-        trim : true
-    },
+    latLng: { 
+        type: {
+            type: String, 
+            enum: ['Point'], 
+            default: 'Point'
+        },
+        coordinates: {
+            type: [Number],
+            required: true,
+            default: [31.7016176,76.820049]
+        }
+      },
     mobile:{
         type:Number,
         trim : true
@@ -182,4 +190,6 @@ const userSchema = new Schema({
     }
 },{timestamps: true});
 
+
+userSchema.index( { latLng : "2dsphere" } )
 module.exports = mongoose.model("User",userSchema);

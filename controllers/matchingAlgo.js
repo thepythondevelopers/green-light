@@ -3,7 +3,8 @@ const {validationResult} = require("express-validator");
 const moment= require('moment')
 let {AgeFromDateString, AgeFromDate} = require('age-calculator');
 exports.matchingAlgo = async (req,res)=>{
-  
+ 
+
   const eyes = req.body.eyes!=null ? req.body.eyes : "";
   const hair_color = req.body.hair_color!=null ? req.body.hair_color : "";
   const religion = req.body.religion!=null ? req.body.religion : "";
@@ -32,11 +33,20 @@ exports.matchingAlgo = async (req,res)=>{
   user = await User.find(
     {
        _id: { $ne: req.user._id },
-     gender:  { $in: interested_in },
-     'dob': {
-       $gte: gte,
-       $lte: lte
-     },
+    //  gender:  { $in: interested_in },
+    //  'dob': {
+    //    $gte: gte,
+    //    $lte: lte
+    //  },
+    // latLng:
+    //    { $near :
+    //       {
+    //         $geometry: { type: "Point",  coordinates: [10.1631526,76.6412712] },
+    //         $minDistance: 1000,
+    //         $maxDistance: 5000
+    //       }
+    //    },
+       
     // 'height': {
     //   $gte: "5'0",
     //   $lte: "6'9"
@@ -47,7 +57,7 @@ exports.matchingAlgo = async (req,res)=>{
     //   {'religion': religion},
     // ]
   }
-    ).select('-password');
+    ).near('latLng', { center : [10.1631526, 76.6412712], spherical: true, maxDistance: 5000 } ).select('-password');
   return res.json(user); 
   
 }

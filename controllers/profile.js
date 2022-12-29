@@ -155,7 +155,7 @@ exports.locationInformation =  (req,res)=>{
   
   user_data = {
     location : req.body.location,
-    latLng : req.body.latLng,
+    //latLng : req.body.latLng,
     mobile : req.body.mobile,
     country : req.body.country,
     state : req.body.state,
