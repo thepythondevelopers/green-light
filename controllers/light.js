@@ -3,51 +3,20 @@ const Light = require("../models/light");
 const mongoose = require("mongoose");
 const ObjectId = mongoose.Types.ObjectId;
 const {validationResult} = require("express-validator");
-
+var pluck = require('arr-pluck');
 exports.saveLight = async (req,res)=>{
   
-  // data = {
-  //   sent_to : req.body.sent_to,
-  //   initiated_id : req.user._id,
-  //   sent_light : req.body.sent_light
-  // }
-  light = await Light.findOne({sent_to1 : req.user._id,user1: ObjectId(req.body.sent_to)});
+  
+  light = await Light.findOne({user : req.user._id,sent: ObjectId(req.body.sent_to)});
   
   if(light!=null){
-    data = {
-      user2 : req.user._id,
-      sent_to2 : req.body.sent_to,
-      sent_light2 : req.body.sent_light
-    }
-    await Light.findOneAndUpdate(
-      {sent_to1 : req.user._id,user1: ObjectId(req.body.sent_to)},
-      {$set : data},
-      {new: true},
-      (err,u) => {
-          if(err){
-              return res.status(404).json({
-                  error : err
-              })
-          
-          }
-  
-          if(u===null){
-              return res.status(404).json({
-                  message : "No Data Found"
-              })
-          }
-  
-          return res.json({'message' : 'Light Send Successfully.'})
-      })
+    return res.json({'message' : 'Already Light Send.'})
   }else{
-    light_check = await Light.findOne({user1 : req.user._id,sent_to1: ObjectId(req.body.sent_to)});
-    if(light_check!=null){
-      return res.status(400).json({'message' : 'Already Light Send.'})
-    }
+
     data = {
-      user1 : req.user._id,
-      sent_to1 : req.body.sent_to,
-      sent_light1 : req.body.sent_light
+      user : req.user._id,
+      sent : req.body.sent_to,
+      light : req.body.sent_light
     }
   
   l =new Light(data);
@@ -64,18 +33,27 @@ exports.saveLight = async (req,res)=>{
 }
 
 exports.sentGreenLight = async (req,res)=>{
-  user = await Light.find({$or: [ { user1:  ObjectId(req.user._id) ,sent_light1 : 'Green',sent_light2 : { $ne: 'Green' } }, { user2: ObjectId(req.user._id),sent_light2 : 'Green',sent_light1 : { $ne: 'Green' }  } ]}).populate('user1','-password').populate('sent_to1','-password');
-  return res.send(user);
+  user = await Light.find({ user:  ObjectId(req.user._id)  ,light:"Green"}).select('sent');
+  sent_id = pluck(user, 'sent');
+  
+  other_user = await Light.find({user: { $in: sent_id },light:  "Green" }).select('user');
+  other_user_id = pluck(other_user, 'user');
+  
+  result = await Light.find({ user:  ObjectId(req.user._id)  ,light:"Green",sent: {$nin: other_user_id }});
+ return res.json(result);
 }
 
 exports.yellowLight = async (req,res)=>{
-  user = await Light.find({$or: [ { user1:  ObjectId(req.user._id) ,sent_light1 : 'Yellow' }, { user2: ObjectId(req.user._id) ,sent_light2 : 'Yellow'} ]}).populate('user1','-password').populate('sent_to1','-password');
+  user = await Light.find({ user:  ObjectId(req.user._id)  ,light:"Yellow"});
   return res.send(user);
 }
 
 exports.mutualGreenLight = async (req,res)=>{
-  user = await Light.find({$or: [ { user1:  ObjectId(req.user._id)  }, { user2: ObjectId(req.user._id) } ],sent_light1:"Green",sent_light2: "Green"}).populate('user1','-password').populate('sent_to1','-password');
-  return res.send(user);
+  user = await Light.find({ user:  ObjectId(req.user._id)  ,light:"Green"}).select('sent');
+  
+  sent_id = pluck(user, 'sent');
+  other_user = await Light.find({user: { $in: sent_id },light:"Green"}).populate('user','-password');
+  return res.send(other_user);
 }
 
 exports.responseLight = async (req,res)=>{
