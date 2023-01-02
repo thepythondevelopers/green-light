@@ -44,12 +44,12 @@ const userSchema = new Schema({
     eyes:{
         type:String,
         trim : true,
-        default : ""
+        //default : ""
     },
     hair_color:{
         type:String,
         trim : true,
-        default : ""
+        //default : ""
     },
     smoking:{
         type:String,
@@ -98,7 +98,7 @@ const userSchema = new Schema({
     religion:{
         type:String,
         trim : true,
-        default : ""
+        //default : ""
     },
     politics:{
         type:String,
@@ -132,8 +132,7 @@ const userSchema = new Schema({
             default: 'Point'
         },
         coordinates: {
-            type: [Number],
-            //required: true,
+            type: [Number]
         }
       },
     mobile:{

@@ -30,6 +30,7 @@ exports.signup =  (req,res)=>{
     state : req.body.state,
     city : req.body.city,
     zipcode : req.body.zipcode,
+    latLng : req.body.latLng
   }
 
   
