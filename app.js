@@ -85,6 +85,7 @@ app.get('/', (req, res)=>{
   // page to be rendered as input
   // This page should be in the views folder
   // in the root directory.
+  //io.emit("test", 'ff');
   res.render('home');
    
   });
@@ -102,11 +103,17 @@ const io = require('socket.io')(server, {
     origin: '*',
   }
 });
-io.on("connection", function (socket) {
-  console.log("Made socket connection");
+
+
+io.on('connection', (socket) => {
+  console.log('Hello');
+  socket.on('chat', (msg) => {
+    io.emit('chat', msg);
+    console.log(msg)
+  });
+  
+  
 });
-
-
 /*io.on("connection", function (socket) {
   console.log("Made socket connection");
 

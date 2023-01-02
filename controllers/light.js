@@ -39,12 +39,12 @@ exports.sentGreenLight = async (req,res)=>{
   other_user = await Light.find({user: { $in: sent_id },light:  "Green" }).select('user');
   other_user_id = pluck(other_user, 'user');
   
-  result = await Light.find({ user:  ObjectId(req.user._id)  ,light:"Green",sent: {$nin: other_user_id }});
+  result = await Light.find({ user:  ObjectId(req.user._id)  ,light:"Green",sent: {$nin: other_user_id }}).populate('sent','-password');
  return res.json(result);
 }
 
 exports.yellowLight = async (req,res)=>{
-  user = await Light.find({ user:  ObjectId(req.user._id)  ,light:"Yellow"});
+  user = await Light.find({ user:  ObjectId(req.user._id)  ,light:"Yellow"}).populate('sent','-password');
   return res.send(user);
 }
 
@@ -52,7 +52,7 @@ exports.mutualGreenLight = async (req,res)=>{
   user = await Light.find({ user:  ObjectId(req.user._id)  ,light:"Green"}).select('sent');
   
   sent_id = pluck(user, 'sent');
-  other_user = await Light.find({user: { $in: sent_id },light:"Green"}).populate('user','-password');
+  other_user = await Light.find({user: { $in: sent_id },light:"Green"}).populate('user','-password').populate('sent','-password');;
   return res.send(other_user);
 }
 

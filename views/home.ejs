@@ -18,9 +18,10 @@
     <center>This is our home page.</center>
     <script>
         const socket =io ('http://localhost:8000')
-        io.on("connection", function (socket) {
-  console.log("Made socket connection");
-});
+        socket.emit('chat', 'Check');
+//         io.on("connection", function (socket) {
+//   console.log("Made socket connection");
+// });
     </script>
 </body>
  
