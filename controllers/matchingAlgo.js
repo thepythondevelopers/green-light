@@ -58,11 +58,11 @@ exports.matchingAlgo = async (req,res)=>{
   }else{
     let userheight = current_user.height.age;
     if(req.body.search==1){
-      gte_height = userheight-5;
-      lte_height = userheight+5;
+      gte_height = userheight-15;
+      lte_height = userheight+15;
     }else{
-      gte_height = userheight-10;
-      lte_height = userheight+10;
+      gte_height = userheight-30;
+      lte_height = userheight+30;
     }
   }
 
