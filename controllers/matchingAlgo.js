@@ -107,7 +107,7 @@ exports.matchingAlgo = async (req,res)=>{
      ]
   }
     ).select('-password');
-  return res.json({data:user,red_light :red_light_id,yellow_light:yellow_light_id}); 
+  return res.json({data:user,red_light :red_light_id,yellow_light:yellow_light_id,green_light : green_light_id}); 
   
 }
 
