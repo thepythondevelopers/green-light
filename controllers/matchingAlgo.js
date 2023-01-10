@@ -17,6 +17,10 @@ exports.matchingAlgo = async (req,res)=>{
   red_light_id = pluck(red_light, 'sent');
   notincluded = notincluded.concat(red_light_id);
 
+  green_light = await Light.find({ user:  ObjectId(req.user._id)  ,light:"Green"}).select('sent');
+  green_light_id = pluck(green_light, 'sent');
+  notincluded = notincluded.concat(green_light_id);
+
   
   const eyes = req.body.eyes!=null ? req.body.eyes : "";
   const hair_color = req.body.hair_color!=null ? req.body.hair_color : "";
