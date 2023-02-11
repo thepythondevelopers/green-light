@@ -16,6 +16,8 @@ jobs:
     steps:
       - name: add directory into safe 
         run: git config --global --add safe.directory /var/www/html/green-light 
+      - name: pint
+        run: echo $env_var
       - name: Taking Git Pull
         run: $env_var git pull
 
