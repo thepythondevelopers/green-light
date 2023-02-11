@@ -4,6 +4,9 @@ on:
     branches:
       - "main"
 
+env:
+  env_var: ${{ vars.G_SSH }}
+
 jobs:
   Git_Pull:
     runs-on: self-hosted
@@ -14,7 +17,7 @@ jobs:
       - name: add directory into safe 
         run: git config --global --add safe.directory /var/www/html/green-light 
       - name: Taking Git Pull
-        run: git pull
+        run: $env_var git pull
 
   Build:
     needs: Git_Pull
