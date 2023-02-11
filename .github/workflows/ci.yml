@@ -5,7 +5,7 @@ on:
       - "main"
 
 env:
-  env_var: ${{ vars.G_SSH }}
+  env_var: ${{ secrets.G_SSH }}
 
 jobs:
   Git_Pull:
